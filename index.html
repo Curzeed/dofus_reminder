@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder Dofus</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="selector">
+            <label for="classes"> Classes :
+                <select name="classes" id="classes_d">
+                    <option value="612d5ab7a57e7800b365afe3">Ecaflip</option>
+                    <option value="612d5ab7a57e7800b365afec">Eniripsa</option>
+                    <option value="612d5ab8a57e7800b365aff5">Iop</option>
+                    <option value="612d5ab8a57e7800b365affe">Cra</option>
+                    <option value="612d5ab5a57e7800b365afb6">Féca</option>
+                    <option value="612d5ab8a57e7800b365b010">Sacrieur</option>
+                    <option value="612d5ab8a57e7800b365b007">Sadida</option>
+                    <option value="612d5ab6a57e7800b365afbf">Osamodas</option>
+                    <option value="612d5ab6a57e7800b365afc8">Enutrof</option>
+                    <option value="612d5ab6a57e7800b365afd1">Sram</option>
+                    <option value="612d5ab7a57e7800b365afda">Xélor</option>
+                    <option value="612d5ab9a57e7800b365b019">Pandawa</option>
+                    <option value="612d5abaa57e7800b365b02b">Zobal</option>
+                    <option value="612d5ab9a57e7800b365b022">Roublard</option>
+                    <option value="612d5abaa57e7800b365b034">Steamer</option>
+                    <option value="612d5abaa57e7800b365b03d">Eliotrope</option>
+                    <option value="612d5abba57e7800b365b046">Huppermage</option>
+                    <option value="612d5abba57e7800b365b04f">Ouginak</option>
+                </select>
+            </label>
+        </div>
+        <div class="selectedClasses">
+        </div>
+    </div>
+    <div class="tab" style="display: none;" >
+        <table id="tab_spell">
+            <tbody id="tab_body">
+                <tr>
+                    <th scope="col">Sort </th>
+                    <th scope="col">Lancement</th>
+                    <th scope="col">Récupération</th>
+                </tr>
+            </tbody>
+            
+            
+        </table>
+    </div>
+    <footer>
+        <div class="footer_elements">
+            <span>Made with love by Curze</span>
+        </div>
+    </footer>
+    
+    <template id="template_class">
+        <div id="class">
+            <span class="class_name"></span> <br> <hr>
+            <label for="spell_research">Sorts :
+            <input type="text" name="spell_research" class="spell_research"></label>
+            <div id="result_search">
+                <select name="result" class="search_result">
+                    <option value="#">Sorts :</option>
+                </select>
+            </div>
+        </div>
+    </template>
+    <template id="template_tab">
+        <tr>
+            <td class="spell_name" ></td>
+            <td class="spell_cast"></td>
+            <td class="spell_cooldown"></td>
+            <td class="spell_recover"></td>
+            <td class="spell_delete">
+                <svg xmlns="http://www.w3.org/2000/svg" id="sv_close" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+            </td>
+        </tr>
+    </template>
+    <script src="index.js"></script>
+</body>
+</html>
