@@ -42,6 +42,7 @@ selectInput.addEventListener('change', () => {
                     getSelectInput(3,spells)
                 }
             })
+            
             divAppend.appendChild(clone)
         }
     })
@@ -140,15 +141,23 @@ function printArray(select){
         let tab = document.querySelector('.tab')
         let template = document.getElementById('template_tab')
         let clone = template.content.cloneNode(true)
+        let tr = clone.querySelector('tr')
         let td = clone.querySelectorAll('td')
         let inputTurn = document.createElement('input')
         let tab_spell = document.getElementById("tab_body")
-
+        tr.id = 'row_'+f
         inputTurn.type = 'number'
         inputTurn.id = 'input_turn_'+f
         td[0].textContent = spell
         td[1].appendChild(inputTurn)
-
+        // deleting row
+        td[4].addEventListener('click', ()=> {
+            if(confirm()){
+                while(tr.firstChild){
+                    tr.removeChild(tr.lastChild)
+                }
+            }
+        })
         // Event listener about the input of the turn by the user
         inputTurn.addEventListener('input',(event) => {
             td[3].innerHTML = +event.srcElement.value + +select.options[select.selectedIndex].id

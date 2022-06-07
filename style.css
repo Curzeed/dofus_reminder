@@ -1,12 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 body{
     color: white;
     background-color: rgba(31, 31, 31, 0.808);
     position: relative;
+    font-family: 'Roboto', sans-serif;
 }
 .selectedClasses{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+option, select{
+    font-family: 'Roboto';
 }
 .class_select{
     display: flex;
@@ -16,7 +21,7 @@ body{
 .class_name{
     text-align: center;
 }
-.class{
+#class{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,9 +47,26 @@ table > tr > tbody{
     text-align: center !important;
 }
 .footer_elements{
+    padding: 1vh;
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
+}
+select{
+    width: 10vh;
+    height: 3vh;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+#classes_d>option:hover {
+    box-shadow: 0 0 10px 100px #1882A8 inset;
+}
+h1{
+    text-align: center;
+}
+p{
+    font-size: 0.8rem;
 }
