@@ -15,7 +15,6 @@ selectInput.addEventListener('change', () => {
     let newApi = apiClasses + input
     fetch(newApi).then(response => response.json()).then(res => {
         // building the character div  
-        console.log(res)
         if(divAppend.childElementCount >= 3){
             alert("T'as que 3 adversaires !")
             return;
@@ -29,7 +28,6 @@ selectInput.addEventListener('change', () => {
             let resSelect = clone.querySelector('.search_result')
 
             resSelect.classList.add('id_search_'+i)
-            console.log(spells)
             input.classList.add('id_'+i)
             class_name.textContent = res.data[0].shortName.fr
             input.addEventListener('input',() => {
