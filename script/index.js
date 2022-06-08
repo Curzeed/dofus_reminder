@@ -15,7 +15,6 @@ selectInput.addEventListener('change', () => {
     let newApi = apiClasses + input
     fetch(newApi).then(response => response.json()).then(res => {
         // building the character div  
-        console.log(res)
         if(divAppend.childElementCount >= 3){
             alert("T'as que 3 adversaires !")
             return;
@@ -27,11 +26,11 @@ selectInput.addEventListener('change', () => {
             let spells = getSpells(res.data[0].breedSpellsId)
             let input = clone.querySelector('.spell_research')
             let resSelect = clone.querySelector('.search_result')
-
             resSelect.classList.add('id_search_'+i)
-            console.log(spells)
             input.classList.add('id_'+i)
             class_name.textContent = res.data[0].shortName.fr
+            spells = getSearchBar(spells,"")
+            printSearch(spells,resSelect) 
             input.addEventListener('input',() => {
     
                 if(input.classList.contains('id_1')){
@@ -70,9 +69,10 @@ function getSpells(spells){
         fetch(getSpells+spell).then(response => response.json()).then(res => {
             let spellsVar = res.data[0].spells
             for(let i = 0; i < spellsVar.length; i++){  
+                let spellGrade = getGradeSpell(spellsVar[i])
                 let spellObject = new Spell() 
                 spellObject.name = spellsVar[i].name.fr
-                fetch(getCooldowns+spellsVar[i].id).then(response => response.json()).then(result => {
+                fetch(getCooldowns+spellsVar[i].id+"&grade="+spellGrade).then(response => response.json()).then(result => {
                     let cdSpell = result.data[0].minCastInterval
                     spellObject.cooldown  = cdSpell
                 })
@@ -111,13 +111,11 @@ function getSearchBar(spells, value){
  * @param {*} select HTML Element <select>
  */
 function printSearch(spells, select){
-
     if(select.childElementCount > 0){
         while(select.firstChild){
             select.removeChild(select.lastChild)
         }
     }
-
     spells.forEach((spell) => {
         let opt = document.createElement('option')
         opt.classList.add('spell_list')
@@ -171,4 +169,9 @@ function printArray(select){
         tab_spell.appendChild(clone)
         tab.style.display = 'block'
     })
+
+}
+
+function getGradeSpell(spell){
+    return spell.spellLevels.length
 }
