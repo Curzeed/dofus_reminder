@@ -11,6 +11,7 @@ class Spell {
 
 selectInput.addEventListener('change', () => {
     let input = selectInput.options[selectInput.selectedIndex].value
+    if(input === '#')return;
     let divAppend = document.querySelector('.selectedClasses')
     let newApi = apiClasses + input
     fetch(newApi).then(response => response.json()).then(res => {
@@ -29,10 +30,7 @@ selectInput.addEventListener('change', () => {
             resSelect.classList.add('id_search_'+i)
             input.classList.add('id_'+i)
             class_name.textContent = res.data[0].shortName.fr
-            spells = getSearchBar(spells,"")
-            printSearch(spells,resSelect) 
             input.addEventListener('input',() => {
-    
                 if(input.classList.contains('id_1')){
                     getSelectInput(1,spells)
                 }else if (input.classList.contains('id_2')){
@@ -64,7 +62,7 @@ function getSelectInput(id,spells){
 function getSpells(spells){
     const getSpells = "https://api.dofusdb.fr/spell-variants/?spellIds="
     const getCooldowns = "https://api.dofusdb.fr/spell-levels?spellId="
-    let spellsClean = [];
+    let spellsClean = new Array();
     spells.forEach( spell => {
         fetch(getSpells+spell).then(response => response.json()).then(res => {
             let spellsVar = res.data[0].spells
@@ -95,7 +93,7 @@ function getSearchBar(spells, value){
     let tab2 = []
     if (value.length > 0){
         spells.forEach(spell => {
-            if(spell.name.toLowerCase().indexOf(value) !== -1){
+            if(spell.name.toLowerCase().includes(value)){
                 tab2.push(spell);
             }
         })
@@ -111,11 +109,15 @@ function getSearchBar(spells, value){
  * @param {*} select HTML Element <select>
  */
 function printSearch(spells, select){
-    if(select.childElementCount > 0){
-        while(select.firstChild){
+    if(select.childElementCount > 1){
+        while(select.firstChild && select.firstChild.value != '#'){
             select.removeChild(select.lastChild)
         }
     }
+    let optBase = document.createElement('option')
+    optBase.value = "#"
+    optBase.textContent = "Sorts : "
+    select.appendChild(optBase)
     spells.forEach((spell) => {
         let opt = document.createElement('option')
         opt.classList.add('spell_list')
@@ -135,6 +137,7 @@ function printArray(select){
     
     select.addEventListener('change', (event)=> {   
         let spell = select.options[select.selectedIndex].value
+        if(spell === '#') return;
         let spellCd = select.options[select.selectedIndex].id
         let tab = document.querySelector('.tab')
         let template = document.getElementById('template_tab')
@@ -174,4 +177,11 @@ function printArray(select){
 
 function getGradeSpell(spell){
     return spell.spellLevels.length
+}
+
+function printStart(spells,select){
+    console.log(spells[1])
+    for(let i = 0 ; i < spells.length; i++){
+        console.log(spells[i])
+    }
 }
