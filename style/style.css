@@ -55,7 +55,7 @@ table > tr > tbody{
     text-align: center;
 }
 select{
-    width: 10vh;
+    width: fit-content;
     height: 3vh;
     font-size: 1rem;
     border-radius: 5px;
