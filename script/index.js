@@ -24,23 +24,38 @@ selectInput.addEventListener('change', () => {
             let template = document.getElementById('template_class')
             let clone = document.importNode(template.content, true)
             let class_name = clone.querySelector('.class_name')
-            let spells = getSpells(res.data[0].breedSpellsId)
-            let input = clone.querySelector('.spell_research')
-            let resSelect = clone.querySelector('.search_result')
-            resSelect.classList.add('id_search_'+i)
-            input.classList.add('id_'+i)
-            class_name.textContent = res.data[0].shortName.fr
-            input.addEventListener('input',() => {
-                if(input.classList.contains('id_1')){
-                    getSelectInput(1,spells)
-                }else if (input.classList.contains('id_2')){
-                    getSelectInput(2,spells)
-                }else if (input.classList.contains('id_3')){
-                    getSelectInput(3,spells)
-                }
+            getSpells(res.data[0].breedSpellsId).then( spellObjects  => {
+                console.log(spellObjects)
+                let spells = []
+                spellObjects.forEach((spellTab) => {
+                    spellTab.value.forEach((spellObject) => {
+                        spells.push(spellObject)
+                    })
+                })
+                
+                console.log("Sorts : ",spells)
+                let input = clone.querySelector('.spell_research')
+                let resSelect = clone.querySelector('.search_result')
+                resSelect.classList.add('id_search_'+i)
+                input.classList.add('id_'+i)
+                class_name.textContent = res.data[0].shortName.fr
+                
+                // Print start    
+                printSearch(spells,resSelect)
+    
+                input.addEventListener('input',() => {
+                    if(input.classList.contains('id_1')){
+                        getSelectInput(1,spells)
+                    }else if (input.classList.contains('id_2')){
+                        getSelectInput(2,spells)
+                    }else if (input.classList.contains('id_3')){
+                        getSelectInput(3,spells)
+                    }
+                })
+                
+                divAppend.appendChild(clone)
             })
             
-            divAppend.appendChild(clone)
         }
     })
 })
@@ -59,28 +74,39 @@ function getSelectInput(id,spells){
  * @param {JSON} spells - JSON 
  * @returns 
  */
-function getSpells(spells){
+async function getSpells(idSpells){
     const getSpells = "https://api.dofusdb.fr/spell-variants/?spellIds="
     const getCooldowns = "https://api.dofusdb.fr/spell-levels?spellId="
-    let spellsClean = new Array();
-    spells.forEach( spell => {
-        fetch(getSpells+spell).then(response => response.json()).then(res => {
-            let spellsVar = res.data[0].spells
-            for(let i = 0; i < spellsVar.length; i++){  
-                let spellGrade = getGradeSpell(spellsVar[i])
-                let spellObject = new Spell() 
-                spellObject.name = spellsVar[i].name.fr
-                fetch(getCooldowns+spellsVar[i].id+"&grade="+spellGrade).then(response => response.json()).then(result => {
-                    let cdSpell = result.data[0].minCastInterval
-                    spellObject.cooldown  = cdSpell
-                })
-                spellsClean.push(spellObject)
-            }
-            
-        })
-    })
+    let promises = []
+    idSpells.forEach( async idSpell => {
+        promises.push(new Promise((resolve, reject)=> {
+            fetch(getSpells+idSpell).then( response => response.json()).then( res => {
+                let spellsVar = res.data[0].spells   
+                const promises2 = []
 
-    return spellsClean;
+                for(let i = 0; i < spellsVar.length; i++){
+                    let spellObject = new Spell()
+                    let spellGrade = getGradeSpell(spellsVar[i])
+                    spellObject.name = spellsVar[i].name.fr
+                    promises2.push(new Promise((resolve, reject)=> {
+                        fetch(getCooldowns+spellsVar[i].id+"&grade="+spellGrade).then(response => response.json()).then(result => {
+                            spellObject.cooldown = result.data[0].minCastInterval
+                            resolve(spellObject)
+                        })
+                       }))
+                }
+                Promise.allSettled(promises2).then( (values) => {
+                    const spells = values.map( (value) => {
+                        return value.value
+                    })
+                    resolve(spells)
+                })
+                
+            })
+        }))
+        
+    })
+    return Promise.allSettled(promises);
 }
 
 /**
@@ -109,6 +135,7 @@ function getSearchBar(spells, value){
  * @param {*} select HTML Element <select>
  */
 function printSearch(spells, select){
+    console.log(spells)
     if(select.childElementCount > 1){
         while(select.firstChild && select.firstChild.value != '#'){
             select.removeChild(select.lastChild)
@@ -177,11 +204,4 @@ function printArray(select){
 
 function getGradeSpell(spell){
     return spell.spellLevels.length
-}
-
-function printStart(spells,select){
-    console.log(spells[1])
-    for(let i = 0 ; i < spells.length; i++){
-        console.log(spells[i])
-    }
 }
